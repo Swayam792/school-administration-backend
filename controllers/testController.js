@@ -60,7 +60,8 @@ export const uploadMarks = async(req, res) => {
         for(let i = 0; i < bodyData.length; i++){           
             let uploadMarkQuery = `insert into marks values (?,?,?,?,?)`;
             connection.query(uploadMarkQuery, [student_id, test_id, bodyData[i].subject_id, bodyData[i].mark_obtained, bodyData[i].total_marks], (err, data) => {            
-                    if(err){   
+                console.log(err);
+                if(err){   
                         f = 1;          
                         return res.status(500).send({
                             success: 0,

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/44acdf0d-6d57-461f-b4e5-7651509c2a8c/AppServices/subscriptions/44acdf0d-6d57-461f-b4e5-7651509c2a8c/resourceGroups/school-management/providers/Microsoft.Web/sites/school-management-api2",
+    "appService.deploySubpath": "."
+}

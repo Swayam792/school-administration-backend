@@ -136,7 +136,7 @@ export const studentPerformance = (req, res) => {
                             message: "No data found!"
                         })
                     } 
-                     
+                      
                     let marksDetail = {test_id: data[0].test_id, test_date: data[0].test_date, subject_name: [], mark_obtained: [], total_marks: [], percentage: 0}
                     let totmarks = 0, mark_ob = 0;
                     for(let i = 0; i < data.length; i++){
@@ -148,11 +148,11 @@ export const studentPerformance = (req, res) => {
                         if(i == data.length - 1){
                             console.log(mark_ob, totmarks)
                             let per = (mark_ob/totmarks)*100;
-                            marksDetail.percentage = per; 
+                            marksDetail.percentage = per.toFixed(2); 
                             allmarksDetail.push(marksDetail);                            
                         }
                     }
-                    if(j == allTest.length - 1){
+                    if(j == allTest.length - 1){ 
                      return res.status(200).json({
                          success: 1,
                          allmarksDetail
@@ -172,6 +172,21 @@ export const updateStudentFeeStatus = (req, res) =>{
         let student_id = req.params.student_id;
        
         let {first_installment_status, second_installment_status, third_installment_status} = req.body;
+        // if(first_installment_status == "paid"){
+        //     first_installment_status = 1;
+        // }else{
+        //     first_installment_status = 0;
+        // }
+        // if(second_installment_status == "paid"){
+        //     second_installment_status = 1;
+        // }else{
+        //     second_installment_status = 0;
+        // }
+        // if(third_installment_status == "paid"){
+        //     third_installment_status = 1;
+        // }else{
+        //     third_installment_status = 0;
+        // }
         var dateObj = new Date();
         let month = dateObj.getUTCMonth() + 1;        
         let academic_year = dateObj.getUTCFullYear();
@@ -181,7 +196,7 @@ export const updateStudentFeeStatus = (req, res) =>{
          
         let updateStatus = `update fees set first_installment_status=?, second_installment_status=?, third_installment_status=? where student_id=? and academic_year=?`;
         connection.query(updateStatus,[first_installment_status, second_installment_status, third_installment_status, student_id, academic_year], (err, data) => {
-             
+            console.log(err)
             if(err){
                 return res.status(500).json({success: 0,error: err.sqlMessage});
             }

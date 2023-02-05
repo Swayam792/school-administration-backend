@@ -7,6 +7,7 @@ export const userLogin = async(req, res) => {
        let {admin_id, password} = req.body;
        let postLogin = `select * from user where admin_id =?;`;
        connection.query(postLogin,admin_id, (err, data) => {
+        console.log(err);
         if(err){
             return res.status(500).json({
                 success: 0, 
