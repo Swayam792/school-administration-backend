@@ -78,9 +78,12 @@ export const updateTeacherSalaryStatus = (req, res) => {
     try{
         let teacher_id = req.params.teacher_id;
         let {month, amount, year} = req.body;
-        let teacherPaymentQuery = 'insert into teacher_salary(teacher_id, amount, month, year) values (?,?,?,?)';
-        connection.query(teacherPaymentQuery, [teacher_id, amount, month, year], (err, data) => {
-            console.log(err);
+        let date = new Date().toJSON(); 
+        date = date.slice(0,10);
+
+        let teacherPaymentQuery = 'insert into teacher_salary(teacher_id, amount, month, year, updated_on) values (?,?,?,?,?)';
+        connection.query(teacherPaymentQuery, [teacher_id, amount, month, year, date], (err, data) => {
+             
             if (err) {
                 return res.status(500).json({
                     success: 0,

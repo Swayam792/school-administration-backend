@@ -9,7 +9,6 @@ adminRouter.get("/students/:student_id", studentDetails);
 adminRouter.get("/parents/:parents_id", studentParentDetails);
 adminRouter.get("/students/:student_id/fees", studentFeesDetails);
 adminRouter.get("/students/:student_id/performance", studentPerformance);
-adminRouter.get("/students/:student_id/alltest", studentPerformance);
 adminRouter.put("/students/:student_id/updatepaymentstatus", updateStudentFeeStatus);
 
 export default adminRouter;

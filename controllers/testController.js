@@ -1,67 +1,19 @@
-import connection from "../config/databaseConn.js";
-
-export const allTest = (req, res) => {
-    try{
-        let student_id = req.params.student_id;
-        let alltestQuery = `select m.student_id,t.test_name,m.test_status from test t,marks m where t.test_id = m.test_id and m.student_id=?;`
-        connection.query(alltestQuery, student_id, (err, data) => {           
-                if(err){
-                    return res.status(500).json({
-                        success: 0,
-                        error: err.sqlMessage
-                    });
-                }
-                return res.status(200).json({
-                    success: 1,
-                    alltestInfo: data
-                });            
-        })
-    }catch(err){
-        return res.status(500).json({
-            success: 0,
-            error : "Something went wrong!"
-        });
-    }
-}
-
-export const testMark = (req, res) => {
-    try{
-        let student_id = req.params.student_id;
-        let test_id = req.params.test_id;
-       
-        let alltestQuery = `select s.subject_name, m.mark_obtained, m.total_marks, m.test_status from marks m, subject s where m.student_id=? and  m.test_id=? and m.subject_id = s.subject_id;`;
-        connection.query(alltestQuery, [student_id, test_id], (err, data) => {            
-                if(err){
-                    return res.status(500).json({
-                        success: 0,
-                        error: err.sqlMessage
-                    });
-                }
-                return res.status(200).json({
-                    success: 1,
-                    studentInfo: data
-                });           
-        })
-    }catch(err){
-        return res.status(500).json({
-            success: 0,
-            error : "Something went wrong!"
-        });
-    }
-}
-
+import connection from "../config/databaseConn.js"; 
 
 export const uploadMarks = async(req, res) => {
     try{
         let student_id = req.params.student_id;
         let test_id = req.params.test_id;
         let bodyData = req.body.inputField; 
+        var dateObj = new Date();
+        let date = dateObj.toJSON(); 
+        date = date.slice(0,10);
         let f = 0; 
         for(let i = 0; i < bodyData.length; i++){           
-            let uploadMarkQuery = `insert into marks values (?,?,?,?,?)`;
-            connection.query(uploadMarkQuery, [student_id, test_id, bodyData[i].subject_id, bodyData[i].mark_obtained, bodyData[i].total_marks], (err, data) => {            
-                console.log(err);
-                if(err){   
+            let uploadMarkQuery = `insert into marks values (?,?,?,?,?,?)`;
+            connection.query(uploadMarkQuery, [student_id, test_id, bodyData[i].subject_id, bodyData[i].mark_obtained, bodyData[i].total_marks,date], (err, data) => {           
+                 
+                    if(err){   
                         f = 1;          
                         return res.status(500).send({
                             success: 0,
@@ -77,7 +29,7 @@ export const uploadMarks = async(req, res) => {
                     }
             })     
         }    
-    }catch(err){
+    }catch(err){ 
         return res.status(500).json({
             success: 0,
             error : "Something went wrong!"

@@ -172,30 +172,18 @@ export const updateStudentFeeStatus = (req, res) =>{
         let student_id = req.params.student_id;
        
         let {first_installment_status, second_installment_status, third_installment_status} = req.body;
-        // if(first_installment_status == "paid"){
-        //     first_installment_status = 1;
-        // }else{
-        //     first_installment_status = 0;
-        // }
-        // if(second_installment_status == "paid"){
-        //     second_installment_status = 1;
-        // }else{
-        //     second_installment_status = 0;
-        // }
-        // if(third_installment_status == "paid"){
-        //     third_installment_status = 1;
-        // }else{
-        //     third_installment_status = 0;
-        // }
+         
         var dateObj = new Date();
+        let date = dateObj.toJSON(); 
+        date = date.slice(0,10);
         let month = dateObj.getUTCMonth() + 1;        
         let academic_year = dateObj.getUTCFullYear();
         if(month >= 1 && month <= 5){
             academic_year -= 1;
         }
          
-        let updateStatus = `update fees set first_installment_status=?, second_installment_status=?, third_installment_status=? where student_id=? and academic_year=?`;
-        connection.query(updateStatus,[first_installment_status, second_installment_status, third_installment_status, student_id, academic_year], (err, data) => {
+        let updateStatus = `update fees set first_installment_status=?, second_installment_status=?, third_installment_status=?, updated_on=? where student_id=? and academic_year=?`;
+        connection.query(updateStatus,[first_installment_status, second_installment_status, third_installment_status, date, student_id, academic_year], (err, data) => {
             console.log(err)
             if(err){
                 return res.status(500).json({success: 0,error: err.sqlMessage});

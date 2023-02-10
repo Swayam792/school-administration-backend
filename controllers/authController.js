@@ -6,8 +6,7 @@ export const userLogin = async(req, res) => {
     try{        
        let {admin_id, password} = req.body;
        let postLogin = `select * from user where admin_id =?;`;
-       connection.query(postLogin,admin_id, (err, data) => {
-        console.log(err);
+       connection.query(postLogin,admin_id, (err, data) => {         
         if(err){
             return res.status(500).json({
                 success: 0, 
@@ -99,6 +98,49 @@ export const teacherLogin = (req, res) => {
             });
         })
     }catch(err) {
-        return res.status(500).json({error : "Something went wrong!"});
+        return res.status(500).json({
+            success:0, 
+            error : "Something went wrong!"
+        });
+    }
+}
+
+export const userChangePassword = (req, res) => {
+    try{
+        let {admin_id, oldPassword, newPassword} = req.body;
+        let updateUserPasswordQuery = `update user set password = ? where admin_id = ? and password = ?;`;
+        let checkUserQuery = `select password from user where admin_id = ?;`;
+        connection.query(checkUserQuery, admin_id, (err, data) => {
+            if(err){
+                return res.status(500).json({success: 0,
+                    error : err.sqlMessage
+                });
+            }
+             
+            if(data[0].password !== oldPassword){
+                return res.status(401).json({
+                    success: 0,
+                    error : "Old password is incorrect !"
+                });
+            }
+
+            connection.query(updateUserPasswordQuery, [newPassword, admin_id, oldPassword], (err, data) => {
+                if(err){
+                    return res.status(500).json({
+                        success: 0,
+                        error : err.sqlMessage
+                    });
+                }
+                return res.status(200).json({
+                    success: 1,
+                    message: "Password changed successfully"
+                });
+            });
+        });
+    }catch(err){
+        return res.status(500).json({
+            success:0,
+            error : "Something went wrong!"
+        });
     }
 }
